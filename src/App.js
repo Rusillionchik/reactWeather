@@ -10,26 +10,36 @@ function App() {
 
   const onClickSearchWeather = async event => {
     event.preventDefault();
-    const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
-    );
-    const data = await response.json();
-    setWeather(data);
+    if (city === "") {
+      alert("Поле ввода пустое");
+      return;
+    }
+    try {
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}`
+      );
+      const data = await response.json();
+      setWeather(data);
+      setCity("");
+    } catch (err) {
+      console.log("Ошибка получения данных", err);
+    }
   };
   return (
-    <div classname="weather">
+    <div className="weather">
       <h1>Погода</h1>
-      <form className="weather__form">
+      <form className="weather__form" onSubmit={onClickSearchWeather}>
         <input
           className="weather__input"
           type="text"
           placeholder="город"
+          value={city}
           onChange={event => setCity(event.target.value)}
         ></input>
         <button
           className="weather__button"
           type="submit"
-          onClick={onClickSearchWeather}
+          // onClick={onClickSearchWeather}
         >
           <svg
             className="weather_logo"
@@ -51,7 +61,11 @@ function App() {
           <p className="weather__temp">
             {Math.round(weather.main.temp - 273)}°C
           </p>
-          <p className="weather__info">{weather.weather[0].main}</p>{" "}
+          <p className="weather__info">
+            {weather.weather[0] !== null
+              ? weather.weather[0].main
+              : "Данные о погоде неизвестны"}
+          </p>{" "}
         </>
       ) : null}
     </div>
