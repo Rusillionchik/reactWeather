@@ -54,7 +54,7 @@ function App() {
           </svg>
         </button>
       </form>
-      {weather.name !== undefined ? (
+      {weather.name && (
         <>
           {" "}
           <h2 className="weather__city">{weather.name}</h2>
@@ -62,12 +62,10 @@ function App() {
             {Math.round(weather.main.temp - 273)}°C
           </p>
           <p className="weather__info">
-            {weather.weather[0] !== null
-              ? weather.weather[0].main
-              : "Данные о погоде неизвестны"}
+            {weather.weather[0]?.main || "Данные о погоде неизвестны"}
           </p>{" "}
         </>
-      ) : null}
+      )}
     </div>
   );
 }
